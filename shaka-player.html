@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRM Video Streaming</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
+</head>
+<body>
+  <h2>DRM-Protected Stream</h2>
+  <video id="video" width="800" controls autoplay></video>
+
+  <script>
+    async function initPlayer() {
+      var video = document.getElementById('video');
+      var player = new shaka.Player(video);
+
+      // Configure Clear Key DRM
+      player.configure({
+        drm: {
+          clearKeys: {
+            'f4353e4b22b7469eb4740a530296af84': 'de8c428017e29a2f461d13be4bd68671'
+          }
+        }
+      });
+
+      try {
+        await player.load('https://pnowlive-a.akamaized.net/live/geohd/dash/geohd.mpd');
+        console.log('The video has been loaded successfully');
+      } catch (e) {
+        console.error('Error loading video', e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initPlayer);
+  </script>
+</body>
+</html>
